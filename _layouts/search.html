@@ -1,0 +1,31 @@
+---
+layout: default
+---
+
+<div class="page-upper">
+    <div class="container">
+        <h1 class="page-title"><span>{{ page.title }}</span></h1>
+        <div id="search-searchbar"></div>
+
+        <div class="post-list" id="search-hits">
+            {% for collection in site.collections %}
+                {% for item in collection %}
+                    <div class="post-item">
+                        <h2>
+                            <a class="post-link" href="{{ item.url | relative_url }}">
+                                {{ item.title | escape }}
+                            </a>
+                        </h2>
+
+                        <div class="post-snippet">
+                            {{ item.excerpt }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        {% include algolia.html %}
+
+    </div>
+</div>
