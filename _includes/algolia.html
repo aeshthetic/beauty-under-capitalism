@@ -4,74 +4,78 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.6.0/dist/instantsearch-theme-algolia.min.css">
 
 <script type="text/javascript">
-  let readableCollectionNames = {
-    "list-asian": "Asian",
-    "list-black": "Black",
-    "list-mena": "Middle Eastern and North African",
-    "list-latinx": "Latinx",
-    "list-problematic" : "Problematic"
-  };
+let readableCollectionNames = {
+  "list-asian": "Asian",
+  "list-black": "Black",
+  "list-mena": "Middle Eastern and North African",
+  "list-latinx": "Latinx",
+  "list-problematic" : "Problematic"
+};
 
-  function companyBlurb (hit) {
-    if (hit.collection == "list-problematic") {
-      return hit.html;
-    } else {
-      return hit.company.description;
-    }
+
+function companyBlurb (hit) {
+  if (hit.collection == "list-problematic") {
+    return hit.html;
+  } else {
+    return hit.company.description;
   }
+}
 
-  function brandUrl (hit) {
-    if (hit.collection == "list-problematic") {
-      return hit.url;
-    } else {
-      return hit.company.url.shop;
-    }
+function brandUrl (hit) {
+  if (hit.collection == "list-problematic") {
+    return hit.url;
+  } else {
+    return hit.company.url.shop;
   }
+}
 
 
-  // Instantiating InstantSearch.js with Algolia credentials
-  const search = instantsearch({
-    appId: '{{ site.algolia.application_id }}',
-    indexName: '{{ site.algolia.index_name }}',
-    apiKey: '{{ site.algolia.search_only_api_key }}'
-  });
+// Instantiating InstantSearch.js with Algolia credentials
+const search = instantsearch({
+  appId: '{{ site.algolia.application_id }}',
+  indexName: '{{ site.algolia.index_name }}',
+  apiKey: '{{ site.algolia.search_only_api_key }}'
+});
 
-  // Adding searchbar and results widgets
-  search.addWidget(
-    instantsearch.widgets.searchBox({
-      container: '#search-searchbar',
-      placeholder: 'Search brands...',
-      poweredBy: true // This is required if you're on the free Community plan
-    })
-  );
+// Adding searchbar and results widgets
+search.addWidget(
+  instantsearch.widgets.searchBox({
+    container: '#search-searchbar',
+    placeholder: 'Search brands...',
+    poweredBy: true // This is required if you're on the free Community plan
+  })
+);
 
-  search.addWidget(
-    instantsearch.widgets.hits({
-      container: '#search-hits',
-      transformData: {
-        item: function(hit) {
-          hit.show =
-            ["list-asian", "list-black", "list-mena", "list-latinx", "list-problematic"]
-            .includes(hit.collection);
-          return hit;
-        }
-      },
-      templates: {
-        item: function(hit) {
-          if (hit.show) {
-            return `
-              <div class="post-item">
-                  <h2><a class="post-link" href="{{ site.baseurl }}${brandUrl(hit)}">${hit.title}</a></h2>
-                  <h3>${readableCollectionNames[hit.collection]}</h3>
-                  <div class="post-snippet">${companyBlurb(hit)}</div>
-              </div>
-              `;
+search.addWidget(
+  instantsearch.widgets.hits({
+    container: '#search-hits',
+    transformData: {
+      item: function(hit) {
+        hit.show =
+          ["list-asian", "list-black", "list-mena", "list-latinx", "list-problematic"]
+          .includes(hit.collection);
+        return hit;
+      }
+    },
+    templates: {
+      item: function(hit) {
+        if (hit.show) {
+          return `
+            <div class="post-item">
+              <h3><a class="post-link" href="{{ site.baseurl }}${brandUrl(hit)}">${hit.title}</a></h3>
+              <h4>${readableCollectionNames[hit.collection]}</h4>
+              <div class="post-snippet">${companyBlurb(hit)}</div>
+            </div>
+            `;
+        } else {
           return '';
         }
       }
-    })
-  );
+    }
 
-  // Starting the search
-  search.start();
+  })
+);
+
+// Starting the search
+search.start();
 </script>

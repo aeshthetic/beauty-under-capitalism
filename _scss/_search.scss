@@ -1,0 +1,12 @@
+.post-item {
+  margin-bottom: 16px;
+  &:after {
+    display: block;
+    content: "—";
+    color: $color_gray;
+  }
+
+  & h4 {
+    margin-top: 0;
+  }
+}

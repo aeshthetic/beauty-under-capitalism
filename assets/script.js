@@ -16,7 +16,10 @@ function removeClass(ele, cls) {
 
 //Listen for the click
 function init() {
-  document.getElementById("js-toggle").addEventListener("click", toggleContact);
+  const toggleId = document.getElementById("js-toggle");
+  if (toggleId) {
+    toggleId.addEventListener("click", toggleContact);
+  }
 }
 
 //Do the thing
