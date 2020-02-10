@@ -13,7 +13,9 @@ let readableCollectionNames = {
     "list-problematic" : "Problematic"
 };
 
-let companyBlurb = function (hit) {
+
+
+function companyBlurb (hit) {
     if (hit.collection == "list-problematic") {
         return hit.html;
     } else {
@@ -21,7 +23,7 @@ let companyBlurb = function (hit) {
     }
 }
 
-let brandUrl = function (hit) {
+function brandUrl (hit) {
     if (hit.collection == "list-problematic") {
         return hit.url;
     } else {
@@ -48,13 +50,11 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.hits({
     container: '#search-hits',
-    attribute: 'collection',
     transformData: {
         item: function(hit) {
-            let validCollections = ["list-asian", "list-black", "list-mena", "list-latinx", "list-problematic"];
-            if (!validCollections.includes(hit.collection)) {
-                hit.show = false;
-            } else { hit.show = true; }
+            hit.show =
+              ["list-asian", "list-black", "list-mena", "list-latinx", "list-problematic"]
+              .includes(hit.collection);
             return hit;
         }
     },
